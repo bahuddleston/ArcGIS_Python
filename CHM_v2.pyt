@@ -115,4 +115,24 @@ def getParameterInfo(self):
             sym.colorizer.breakCount = 10
             sym.colorizer.colorRamp = p.listColorRamps('Bathymetric Scale')[0]
             sym.colorizer.noDataColor = {'RGB': [0, 0, 0, 0]}
+	    if lyr == chm_lyr:
+		value = 4.3
+		# Creates proper labels and breaks by story (meter)
+		for brk in sym.colorizer.classBreaks:
+		    brk.upperBound = value
+		    if value >= 42.0:  # would print 43.0 as 42.999999...
+    			brk.label = ">43.0m" 
+    		else:
+    			brk.lable = f"<{value:.1f}m"
+		    value = value + 4.3
+		else:
+		    value = 14
+		# Creates proper labels and breaks by story (feet)
+		    for brk in sym.colorizer.classBreaks:
+    			brk.upperBound = value
+    			if value >= 140:
+    			    brk.lable = ">140ft"
+			else:
+			    brk.label = f"<{value}ft"
+			    value = value + 14
             lyr.symbology = sym
